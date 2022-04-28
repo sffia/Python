@@ -13,11 +13,8 @@ i=1
 for data in oth_all:
     if data.find(name='h4') is not None:
         print("\nНовость №",i)
-        news_block = data
-
-        for x in news_block:
-            link = news_block.find(name='a', )
-            print("Ссылка:", 'https://vz.ru' + link.get('href'))
+        news_block = data #загружается весь код внутри <h4>(ниже и правее)
+        print("Ссылка:", 'https://vz.ru' + news_block.get('href')) #пишет первую ссылку href
                 
         print(news_block.text)
     i+=1
