@@ -8,11 +8,14 @@ soup = BeautifulSoup(page.text, 'html.parser')
 
 oth_all = soup.findAll(name='div', class_='othnews')
 oth_filtr = []
+news_block = []
 
 i=1
 for data in oth_all:
     if data.find(name='h4') is not None:
         print("\nНовость №",i)
-        print("Ссылка:", 'https://vz.ru' + data.get('href')) 
-        print(data.text)
+        news_block = data
+        link = data.find(name='a')
+        print("Ссылка:", 'https://vz.ru' + link.get('href'))
+        print(news_block.text)
     i+=1
