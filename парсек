@@ -6,16 +6,55 @@ page = requests.get(url)
 print(page.status_code)  # статус код = 200 --> подключено
 soup = BeautifulSoup(page.text, 'html.parser')
 
+main_all = soup.findAll(name='div', class_='mainnews')
 oth_all = soup.findAll(name='div', class_='othnews')
-oth_filtr = []
+fixed_wrap = soup.findAll(name='div',class_='fixed_wrap') #левая панель
 news_block = []
-
 i=1
-for data in oth_all:
+j=1
+
+print("Основные новости:")
+for data in main_all:
+    if data.find(name='h1') is not None:
+        print("\nНовость №", j)
+        news_block = data
+        link = data.find('a')
+        print(link.text)
+        print("Ссылка основной новости:", 'https://vz.ru' + link.get('href'))
+        print("------------------------------")
+        j += 1
+
+print("Другие новости:")
+for data in oth_all: # пока нет кода для strong class
     if data.find(name='h4') is not None:
         print("\nНовость №",i)
         news_block = data
-        link = data.find(name='a')
-        print("Ссылка:", 'https://vz.ru' + link.get('href'))
-        print(news_block.text)
+        link = data.find('a')
+        print(link.text)
+        print("Ссылка основной новости:", 'https://vz.ru' + link.get('href'))
+        # print(news_block)
+        print("------------------------------")
+        oth_news_h5 = news_block.findAll(name='h5')
+        oth_news_div_text = news_block.findAll(name='div',class_='text')
+        # oth_news_strong_class = news_block.findAll(name='strong',class_='material-type')
+        # print(oth_news_strong_class)
+        for h5 in oth_news_h5:
+            if h5.find('a') is not None:
+                print(h5.text)
+                link = h5.find('a')
+                print("Ссылка мнения на новость:", 'https://vz.ru' + link.get('href'))
+        for div_text in oth_news_div_text:
+            if div_text.find('a') is not None:
+                print(div_text.text)
+                link = div_text.find('a')
+                print("Ссылка:", 'https://vz.ru' + link.get('href'))
+        # for strong in oth_news_strong_class:
+        #     if strong.find('strong') is not None:
+        #         material_type = strong.text;
+        #         print(material_type)
+        #     if strong.find('a') is not None:
+        #         link = strong.find('a')
+        #         print("Ссылка:", link.get('href'))
+        #         print(link.text)
     i+=1
+
