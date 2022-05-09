@@ -8,11 +8,21 @@ soup = BeautifulSoup(page.text, 'html.parser')
 
 main_all = soup.findAll(name='div', class_='mainnews')
 oth_all = soup.findAll(name='div', class_='othnews')
+top_all = soup.findAll(name = 'td', class_= 'top')
 fixed_wrap = soup.findAll(name='div',class_='fixed_wrap') #левая панель
 news_block = []
 i=1
 j=1
 
+print('Топ новостей:')
+for data in top_all:
+    print("\nНовость №", k)
+    if data.find('a') is not None:
+        link = data.find('a')
+        print(link.text)
+        print('Ссылка:', 'https://vz.ru' + link.get('href'))
+    k+=1
+    
 print("Основные новости:")
 for data in main_all:
     if data.find(name='h1') is not None:
