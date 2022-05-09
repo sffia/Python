@@ -19,9 +19,11 @@ for data in main_all:
         print("\nНовость №", j)
         news_block = data
         link = data.find('a')
-        print(link.text)
-        print("Ссылка основной новости:", 'https://vz.ru' + link.get('href'))
-        print("------------------------------")
+        add_text = news_block.find(name='a',class_='text')
+        print(link.text) #название статьи
+        print(add_text.text) #текст начала статьи
+        print("Ссылка основной новости:", 'https://vz.ru' + link.get('href')) #ссылка на статью
+        print("------------------------------------------------------------")
         j += 1
 
 print("Другие новости:")
