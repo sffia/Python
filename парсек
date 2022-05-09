@@ -27,36 +27,38 @@ for data in main_all:
         j += 1
 
 print("Другие новости:")
-for data in oth_all: # пока нет кода для strong class
+for data in oth_all:  # пока нет кода для strong class
     if data.find(name='h4') is not None:
-        print("\nНовость №",i)
+        print("\nНовость №", i)
         news_block = data
         link = data.find('a')
-        print(link.text)
-        print("Ссылка основной новости:", 'https://vz.ru' + link.get('href'))
+
+        oth_news_h = news_block.findAll(name={'h5', 'h4'})
+        oth_news_div_text = news_block.findAll(name='div', class_='text')
+        oth_news_div = news_block.findAll('div')
         # print(news_block)
-        print("------------------------------")
-        oth_news_h5 = news_block.findAll(name='h5')
-        oth_news_div_text = news_block.findAll(name='div',class_='text')
-        # oth_news_strong_class = news_block.findAll(name='strong',class_='material-type')
-        # print(oth_news_strong_class)
-        for h5 in oth_news_h5:
-            if h5.find('a') is not None:
-                print(h5.text)
-                link = h5.find('a')
-                print("Ссылка мнения на новость:", 'https://vz.ru' + link.get('href'))
+
+        for h in oth_news_h:
+            if h.find('a') is not None:
+                print(h.text)
+                link = h.find('a')
+                print("Ссылка:", 'https://vz.ru' + link.get('href'))
+
+        print('\nТекст статьи:')
+
         for div_text in oth_news_div_text:
             if div_text.find('a') is not None:
                 print(div_text.text)
                 link = div_text.find('a')
                 print("Ссылка:", 'https://vz.ru' + link.get('href'))
-        # for strong in oth_news_strong_class:
-        #     if strong.find('strong') is not None:
-        #         material_type = strong.text;
-        #         print(material_type)
-        #     if strong.find('a') is not None:
-        #         link = strong.find('a')
-        #         print("Ссылка:", link.get('href'))
-        #         print(link.text)
-    i+=1
 
+        print('\nДополнительные материалы:')
+        for n in oth_news_div:
+            if n.find(name='strong',class_='material-type') is not None:
+                material_type = n.find(name = 'strong',class_='material-type').text
+                link = n.find('a')
+                comments = n.find(name='span',class_='material-title').text
+                print(material_type,comments)
+                print("Ссылка:", link.get('href'),"\n")
+    i += 1
+    print("------------------------------------------------------------")
