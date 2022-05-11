@@ -1,19 +1,20 @@
-from bs4 import BeautifulSoup  # импорт библиотеки BeautifulSoup
 import requests  # импорт библиотеки request
+from bs4 import BeautifulSoup  # импорт библиотеки BeautifulSoup
 
 url = 'http://vz.ru'  # ссылка на страницу сайта для парсинга
 page = requests.get(url)
-print(page.status_code)  # статус код = 200 --> подключено
+# print(page.status_code)  # статус код = 200 --> подключено
 soup = BeautifulSoup(page.text, 'html.parser')
 
 main_all = soup.findAll(name='div', class_='mainnews')
 oth_all = soup.findAll(name='div', class_='othnews')
-top_all = soup.findAll(name = 'td', class_= 'top')
-fixed_wrap = soup.findAll(name='div',class_='fixed_wrap') #левая панель
-news_block = []
-i=1
-j=1
+top_all = soup.findAll(name='td', class_='top')
+hour_all = soup.findAll(name='dt')  # раздел "Новости часа"
 
+news_block = []
+i = 1
+j = 1
+k = 1
 print('Топ новостей:')
 for data in top_all:
     print("\nНовость №", k)
@@ -21,18 +22,18 @@ for data in top_all:
         link = data.find('a')
         print(link.text)
         print('Ссылка:', 'https://vz.ru' + link.get('href'))
-    k+=1
-    
-print("Основные новости:")
+    k += 1
+
+print("\nОсновные новости:")
 for data in main_all:
     if data.find(name='h1') is not None:
         print("\nНовость №", j)
         news_block = data
         link = data.find('a')
-        add_text = news_block.find(name='a',class_='text')
-        print(link.text) #название статьи
-        print(add_text.text) #текст начала статьи
-        print("Ссылка основной новости:", 'https://vz.ru' + link.get('href')) #ссылка на статью
+        add_text = news_block.find(name='a', class_='text')
+        print(link.text)  # название статьи
+        print(add_text.text)  # текст начала статьи
+        print("Ссылка основной новости:", 'https://vz.ru' + link.get('href'))  # ссылка на статью
         print("------------------------------------------------------------")
         j += 1
 
@@ -43,15 +44,21 @@ for data in oth_all:  # пока нет кода для strong class
         news_block = data
         link = data.find('a')
 
-        oth_news_h = news_block.findAll(name={'h5', 'h4'})
+        oth_news_h4 = news_block.findAll(name='h4')
+        oth_news_h5 = news_block.findAll(name='h5')
         oth_news_div_text = news_block.findAll(name='div', class_='text')
         oth_news_div = news_block.findAll('div')
         # print(news_block)
 
-        for h in oth_news_h:
-            if h.find('a') is not None:
-                print(h.text)
-                link = h.find('a')
+        for h5 in oth_news_h5:
+            if h5.find('a') is not None:
+                theme = h5.text
+                print('Раздел:', theme)
+
+        for h4 in oth_news_h4:
+            if h4.find('a') is not None:
+                print(h4.text)
+                link = h4.find('a')
                 print("Ссылка:", 'https://vz.ru' + link.get('href'))
 
         print('\nТекст статьи:')
@@ -63,12 +70,26 @@ for data in oth_all:  # пока нет кода для strong class
                 print("Ссылка:", 'https://vz.ru' + link.get('href'))
 
         print('\nДополнительные материалы:')
+        count_materials = 0
         for n in oth_news_div:
-            if n.find(name='strong',class_='material-type') is not None:
-                material_type = n.find(name = 'strong',class_='material-type').text
+            if n.find(name='strong', class_='material-type') is not None:
+                material_type = n.find(name='strong', class_='material-type').text
                 link = n.find('a')
-                comments = n.find(name='span',class_='material-title').text
-                print(material_type,comments)
-                print("Ссылка:", link.get('href'),"\n")
+                comments = n.find(name='span', class_='material-title').text
+                print(material_type, comments)
+                print("Ссылка:", link.get('href'), "\n")
+                count_materials += 1
+        print("Количество дополнительных материалов:", count_materials)
     i += 1
     print("------------------------------------------------------------")
+#
+for data in hour_all:
+    if data.find('span') is not None:
+        news_time = data.find('span').text
+        print('Время:', news_time)
+        link = data.find('a')
+        print(link.text)
+        dd = data.find('dd').text
+        print(dd)
+        print('Ссылка:', 'https://vz.ru' + link.get('href'))
+        print("------------------------------------------------------------")
