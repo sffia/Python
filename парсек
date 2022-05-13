@@ -11,17 +11,44 @@ oth_all = soup.findAll(name='div', class_='othnews')
 top_all = soup.findAll(name='td', class_='top')
 hour_all = soup.findAll(name='dt')  # раздел "Новости часа"
 
+date_time = datetime.datetime.now() #текущее время для названия папки
+format_date_time = date_time.strftime('%d.%m.%Y_%H.%M.%S') #преобразование формата date_time
+
+topnews_path = 'C:\parser\_topnews_'
+
 news_block = []
 i = 1
 j = 1
 k = 1
-print('Топ новостей:')
+
+print('Топ новостей:') 
+fullpath_topnews = os.path.join(topnews_path, format_date_time) #объединение для того, чтоб путь быть C:/parser/_topnews_/date
+os.mkdir(fullpath_topnews) #создание папки 
+
 for data in top_all:
-    print("\nНовость №", k)
+    file_name = str(k) #имя файла
+    fullpath_topnews_file = os.path.join(fullpath_topnews,file_name) #объеденинение для описания пути к создающемуся файлу
+    my_file = open(fullpath_topnews_file + ".txt", "w+") #открыть файл для записи
     if data.find('a') is not None:
         link = data.find('a')
-        print(link.text)
-        print('Ссылка:', 'https://vz.ru' + link.get('href'))
+        my_file.write(link.text) #запись названия в файл
+
+        news_link = 'https://vz.ru' + link.get('href') #ссылка на новость
+
+        news_page = requests.get(news_link) #для парсинга страницы самой новости
+        news = BeautifulSoup(news_page.text, 'html.parser')
+        p_all = news.find(name='div',class_='text newtext') #теги для поиска текста
+        for p in p_all: #текст новости
+            if p.find('b') is not None:
+                my_file.write(p.text)
+            if p.find('p') is not None:
+                my_file.write(p.text)
+
+        news_page = None
+        news_link = None
+
+        my_file.close()
+
     k += 1
 
 print("\nОсновные новости:")
@@ -82,7 +109,7 @@ for data in oth_all:  # пока нет кода для strong class
         print("Количество дополнительных материалов:", count_materials)
     i += 1
     print("------------------------------------------------------------")
-#
+
 for data in hour_all:
     if data.find('span') is not None:
         news_time = data.find('span').text
