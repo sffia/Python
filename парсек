@@ -140,10 +140,12 @@ for data in hour_all:
         news_page = requests.get(news_link)  # для парсинга страницы самой новости
         news = BeautifulSoup(news_page.text, 'html.parser')
         p_all = news.find(name='div', class_='text newtext')  # теги для поиска текста
-        for p in p_all:  # текст новости
-            if p.find('b') is not None:
-                my_file.write(p.text)
-            if p.find('p') is not None:
-                my_file.write(p.text)
+        for b in p_all:  # текст новости
+            if b.find('b') is not None:
+                my_file.write(b.text)
+            if b.find('p') is not None:
+                my_file.write(b.text)
         news_page = None
         news_link = None
+        
+        my_file.close()
