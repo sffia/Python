@@ -1,0 +1,75 @@
+fullpath_othnews = os.path.join(othnews_path, format_date_time)
+# os.mkdir(fullpath_othnews)
+# print("Другие новости:")
+# for data in oth_all:  # пока нет кода для strong class
+#     if data.find(name='h4') is not None:
+#         news_block = data
+#         link = data.find('a')
+#         print(link.text)
+#         oth_news_h4 = news_block.findAll(name='h4')
+#         oth_news_h5 = news_block.findAll(name='h5')
+#         oth_news_div = news_block.findAll('div')
+#         # print(news_block)
+#
+#         for h4 in oth_news_h4:
+#             if h4.find('a') is not None:
+#                 link = h4.find('a')
+#                 filename = link.text
+#                 news_link = 'https://vz.ru' + link.get('href')
+#
+#         file_name = filename  # имя файла
+#         fullpath_othnews_file = os.path.join(fullpath_othnews,
+#                                              file_name)  # объеденинение для описания пути к создающемуся файлу
+#         my_file = open(fullpath_othnews_file + ".txt", "w+")  # открыть файл для записи
+#
+#         my_file.write(link.text)  # запись названия в файл
+#
+#         for h5 in oth_news_h5:
+#             if h5.find('a') is not None:
+#                 theme = h5.text
+#                 my_file.write(theme)
+#
+#         news_page = requests.get(news_link)  # для парсинга страницы самой новости
+#         news = BeautifulSoup(news_page.text, 'html.parser')
+#         p_all = news.find(name='div', class_='text newtext')  # теги для поиска текста
+#         for p in p_all:  # текст новости
+#             if p.find('b') is not None:
+#                 my_file.write(p.text)
+#             if p.find('p') is not None:
+#                 my_file.write(p.text)
+#
+#         news_page = None
+#         news_link = None
+#
+#         my_file.write('\nДополнительные материалы:')
+#         count_materials = 0
+#         for n in oth_news_div:
+#             if n.find(name='strong', class_='material-type') is not None:
+#                 material_type = n.find(name='strong', class_='material-type').text
+#                 link = n.find('a')
+#                 comments = n.find(name='span', class_='material-title').text
+#                 n_link = link.get('href')
+#
+#                 print(material_type, comments)
+#
+#                 my_file.write(material_type)
+#                 my_file.write(comments)
+#
+#                 count_materials = 0
+#                 if material_type != 'Интервью:':
+#                     if n_link[0] == 'h':
+#                         count_materials += 1
+#                         news_page = requests.get(n_link)  # для парсинга страницы самой новости
+#                         news = BeautifulSoup(news_page.text, 'html.parser')
+#                         p_all = news.find(name='div', class_='text newtext')  # теги для поиска текста
+#                         for p in p_all:  # текст новости
+#                             if p.find('b') is not None:
+#                                 my_file.write(p.text)
+#                             if p.find('p') is not None:
+#                                 my_file.write(p.text)
+#                         n_page = None
+#                         n_link = None
+#                     else:
+#                         continue
+#
+#         my_file.close()
