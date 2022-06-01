@@ -38,7 +38,7 @@ def clicked():
             result = tk.Label(new_window, text='Добавлено!', font=('Arial', 13), **base_padding)
             result.pack()
             con.commit()
-        elif 'create' in sql:
+        elif 'update' in sql:
             cur.execute(sql)
             result = tk.Label(new_window, text='Создано!', font=('Arial', 13), **base_padding)
             result.pack()
